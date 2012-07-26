@@ -1,0 +1,48 @@
+##########################################################
+################ ENVIRONMENT SETUP #######################
+##########################################################
+#AddHandler x-httpd-php5-cgi .php .html
+#Options -MultiViews 
+#Options +FollowSymLinks
+
+
+####################################################
+# Skip if directory / file exists...
+####################################################
+RewriteCond %{REQUEST_FILENAME} -f [NC,OR]
+RewriteCond %{REQUEST_FILENAME} -d [NC]
+RewriteRule .* - [L]
+
+
+##########################################################
+################ MOD_REWRITE RULES #######################
+##########################################################
+RewriteEngine On
+RewriteRule ^(include|includes|js|images|styles) - [L]
+
+
+####################################################
+# HOST rewrite rule(s)...
+####################################################
+RewriteCond %{HTTP_HOST} ^ournews.com
+RewriteRule (.*) http://www.ournews.com/$1 [R=301,L]
+
+
+####################################################
+# News topic rewrite rule(s)...
+####################################################
+RewriteRule ^news/topic/(.*).html$ article.php?modifier=$1 [NS,L]
+
+
+####################################################
+# Page rewrite rules...
+####################################################
+RewriteRule ^news/$ headlines.php [NS,L]
+RewriteRule ^article/$ article.php [NS,L]
+
+
+####################################################
+# Catch any remining URLs...
+####################################################
+RewriteRule (.*)$ http://192.168.1.200/code/20120719022648/? [NS,L]
+#RewriteRule (.*)$ http://www.ournews.com? [NS,L]
